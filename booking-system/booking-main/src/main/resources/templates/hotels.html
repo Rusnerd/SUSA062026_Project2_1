@@ -1,0 +1,23 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Hotels</title></head>
+<body>
+<h1>Hotels</h1>
+<p th:if="${error}" th:text="${error}"></p>
+<form th:action="@{/hotels}" method="post">
+  <div><label>Name</label><input name="name" required></div>
+  <div><label>City</label><input name="city" required></div>
+  <div><label>Stars</label><input type="number" min="1" max="5" name="stars" required></div>
+  <button type="submit">Create Hotel</button>
+</form>
+<hr>
+<h2>All Hotels</h2>
+<ul>
+  <li th:each="h : ${hotels}">
+    <span th:text="${h.name}"></span> - <span th:text="${h.city}"></span> - <span th:text="${h.stars}"></span>★
+    <a th:href="@{/rooms?hotelId={id}(id=${h.id})}">View Rooms</a>
+  </li>
+</ul>
+<p><a th:href="@{/}">Back</a></p>
+</body>
+</html>

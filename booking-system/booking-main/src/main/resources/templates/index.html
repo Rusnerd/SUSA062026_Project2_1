@@ -1,8 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><title>Booking Site</title></head>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Booking Home</title></head>
 <body>
 <h1>Booking Site</h1>
-<p>Index page is up.</p>
+<ul>
+  <li><a th:href="@{/hotels}">Hotels</a></li>
+  <li><a th:href="@{/apartments}">Apartments (UI)</a></li>
+  <li><a th:href="@{/rooms}">Rooms</a></li>
+  <li><a th:href="@{/trips}">Trips (UI)</a></li>
+  <li><a th:href="@{/bookings}">My Room Bookings</a></li>
+  <li><a th:href="@{/coupons}">Coupons</a></li>
+  <li><a th:href="@{/experiences}">Experience Reservations (Feign)</a></li>
+</ul>
+<p><a th:href="@{/admin/seed}">Admin: Seed demo data</a></p>
 </body>
 </html>

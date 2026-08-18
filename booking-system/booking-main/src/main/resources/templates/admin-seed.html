@@ -1,0 +1,12 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Admin Seed</title></head>
+<body>
+<h1>Admin: Seed demo data</h1>
+<p th:if="${message}" th:text="${message}"></p>
+<form th:action="@{/admin/seed}" method="post">
+  <button type="submit">Seed sample hotels/rooms/coupons</button>
+</form>
+<p><a th:href="@{/}">Back</a></p>
+</body>
+</html>

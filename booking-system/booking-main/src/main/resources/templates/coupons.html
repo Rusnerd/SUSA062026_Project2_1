@@ -1,0 +1,27 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Coupons</title></head>
+<body>
+<h1>Coupons</h1>
+<p th:if="${message}" th:text="${message}"></p>
+<form th:action="@{/coupons}" method="post">
+  <div><label>Code</label><input name="code" required></div>
+  <div><label>Discount percent</label><input type="number" min="1" max="90" name="discountPercent" required></div>
+  <div><label>Active</label><select name="active"><option value="true" selected>true</option><option value="false">false</option></select></div>
+  <button type="submit">Create / Update coupon</button>
+</form>
+<hr>
+<h2>All Coupons</h2>
+<ul>
+  <li th:each="c : ${coupons}">
+    <b th:text="${c.code}"></b>
+    - <span th:text="${c.discountPercent}"></span>%
+    - active=<span th:text="${c.active}"></span>
+    <form th:action="@{/coupons/{id}/toggle(id=${c.id})}" method="post" style="display:inline">
+      <button type="submit">Toggle</button>
+    </form>
+  </li>
+</ul>
+<p><a th:href="@{/}">Back</a></p>
+</body>
+</html>

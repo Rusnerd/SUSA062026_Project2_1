@@ -1,0 +1,17 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Create Booking</title></head>
+<body>
+<h1>New Room Booking</h1>
+<p th:if="${error}" th:text="${error}"></p>
+<form th:action="@{/bookings}" method="post">
+  <input type="hidden" name="roomId" th:value="${roomId}">
+  <div><label>Guest name</label><input name="guestName" required></div>
+  <div><label>Check-in</label><input type="date" name="startDate" required></div>
+  <div><label>Check-out</label><input type="date" name="endDate" required></div>
+  <div><label>Apply coupon code (optional)</label><input name="couponCode"></div>
+  <button type="submit">Confirm booking</button>
+</form>
+<p><a th:href="@{/rooms}">Back to rooms</a></p>
+</body>
+</html>

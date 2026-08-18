@@ -1,0 +1,20 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Bookings</title></head>
+<body>
+<h1>My Room Bookings</h1>
+<p th:if="${message}" th:text="${message}"></p>
+<ul>
+  <li th:each="b : ${bookings}">
+    <b th:text="${b.guestName}"></b>
+    : room# <span th:text="${b.roomNumber}"></span>
+    from <span th:text="${b.startDate}"></span>
+    to <span th:text="${b.endDate}"></span>
+    | status: <span th:text="${b.status}"></span>
+    <span th:text="${b.totalPrice}"></span>
+    <a th:if="${b.cancelable}" th:href="@{/bookings/{id}/cancel(id=${b.id})}">Cancel</a>
+  </li>
+</ul>
+<p><a th:href="@{/rooms}">Book another room</a> | <a th:href="@{/}">Back</a></p>
+</body>
+</html>

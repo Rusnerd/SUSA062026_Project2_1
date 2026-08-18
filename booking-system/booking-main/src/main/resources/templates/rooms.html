@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Rooms</title></head>
+<body>
+<h1>Rooms</h1>
+<form th:action="@{/rooms}" method="get">
+  <label>Filter by hotelId</label>
+  <input name="hotelId" th:value="${hotelId}">
+  <button type="submit">Filter</button>
+</form>
+<hr>
+<h2>Create Room</h2>
+<form th:action="@{/rooms}" method="post">
+  <div><label>Hotel Id</label><input name="hotelId" required></div>
+  <div><label>Room Number</label><input name="roomNumber" required></div>
+  <div><label>Capacity</label><input type="number" min="1" name="capacity" required></div>
+  <div><label>Price / night</label><input type="number" min="0" step="0.01" name="price" required></div>
+  <button type="submit">Add Room</button>
+</form>
+<hr>
+<h2>Rooms</h2>
+<ul>
+  <li th:each="r : ${rooms}">
+    <span th:text="${r.roomNumber}"></span>
+    (<span th:text="${r.capacity}"></span> ppl) - <span th:text="${r.price}"></span>
+    <span th:text="${r.currency}"></span>
+    <a th:href="@{/bookings/new?roomId={id}(id=${r.id})}">Book</a>
+  </li>
+</ul>
+<p><a th:href="@{/hotels}">Hotels</a> | <a th:href="@{/}">Back</a></p>
+</body>
+</html>
