@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User management</title>
+</head>
+<body>
+<h1>User management</h1>
+
+<p th:if="${param.updated}">User role updated.</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Current role</th>
+        <th>Change role</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+        <td th:text="${user.role}"></td>
+        <td>
+            <form th:action="@{/admin/users/role}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}">
+                <select name="role">
+                    <option
+                            th:each="role : ${roles}"
+                            th:value="${role}"
+                            th:text="${role}"
+                            th:selected="${role == user.role}">
+                    </option>
+                </select>
+                <button type="submit">Save role</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
