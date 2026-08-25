@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -57,7 +57,7 @@ class PaymentIntentControllerTest {
     }
 
     @Test
-    void returnsPaymentIntentByIdWithHateoasLinks() throws Exception {
+    void returnsPaymentIntentById() throws Exception {
         UUID id = UUID.randomUUID();
         PaymentIntent intent = new PaymentIntent(id, UUID.randomUUID(), new BigDecimal("15.00"), PaymentStatus.CREATED);
         when(paymentIntentService.getById(id)).thenReturn(intent);
@@ -65,11 +65,7 @@ class PaymentIntentControllerTest {
         mockMvc.perform(get("/api/payment-intents/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id.toString()))
-                .andExpect(jsonPath("$.status").value("CREATED"))
-                .andExpect(jsonPath("$._links.self.href").value(containsString("/api/payment-intents/" + id)))
-                .andExpect(jsonPath("$._links.paid.href").value(containsString("/api/payment-intents/" + id + "/paid")))
-                .andExpect(jsonPath("$._links.failed.href").value(containsString("/api/payment-intents/" + id + "/failed")))
-                .andExpect(jsonPath("$._links.canceled.href").value(containsString("/api/payment-intents/" + id + "/canceled")));
+                .andExpect(jsonPath("$.status").value("CREATED"));
     }
 
     @Test

@@ -1,15 +1,11 @@
 package org.example.bookingexperiences.payment;
 
 import jakarta.validation.Valid;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/payment-intents")
@@ -22,8 +18,7 @@ public class PaymentIntentController {
 
     @PostMapping
     public ResponseEntity<PaymentIntent> create(@Valid @RequestBody CreatePaymentIntentRequest request) {
-        PaymentIntent created = paymentIntentService.createPaymentIntent(
-                request.id(), request.bookingId(), request.amount());
+        PaymentIntent created = paymentIntentService.createPaymentIntent(request.id(), request.bookingId(), request.amount());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -41,17 +36,9 @@ public class PaymentIntentController {
     public PaymentIntent canceled(@PathVariable("id") UUID id) {
         return paymentIntentService.markCanceled(id);
     }
-
     @GetMapping("/{id}")
-    public EntityModel<PaymentIntent> getById(@PathVariable("id") UUID id) {
-        PaymentIntent paymentIntent = paymentIntentService.getById(id);
-
-        return EntityModel.of(
-                paymentIntent,
-                linkTo(methodOn(PaymentIntentController.class).getById(id)).withSelfRel(),
-                linkTo(methodOn(PaymentIntentController.class).paid(id)).withRel("paid"),
-                linkTo(methodOn(PaymentIntentController.class).failed(id)).withRel("failed"),
-                linkTo(methodOn(PaymentIntentController.class).canceled(id)).withRel("canceled")
-        );
+    public PaymentIntent getById(@PathVariable("id") UUID id) {
+        return paymentIntentService.getById(id);
     }
+
 }

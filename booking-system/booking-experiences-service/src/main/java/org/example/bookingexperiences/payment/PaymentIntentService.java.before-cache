@@ -2,8 +2,6 @@ package org.example.bookingexperiences.payment;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +19,6 @@ public class PaymentIntentService {
     }
 
     @Transactional
-    @CachePut(cacheNames = "paymentIntents", key = "#id")
     public PaymentIntent createPaymentIntent(UUID id, UUID bookingId, BigDecimal amount) {
         PaymentIntent intent = new PaymentIntent(id, bookingId, amount, PaymentStatus.CREATED);
         PaymentIntent savedIntent = paymentIntentRepository.save(intent);
@@ -30,25 +27,21 @@ public class PaymentIntentService {
     }
 
     @Transactional
-    @CachePut(cacheNames = "paymentIntents", key = "#id")
     public PaymentIntent markPaid(UUID id) {
         return changeStatus(id, PaymentStatus.PAID);
     }
 
     @Transactional
-    @CachePut(cacheNames = "paymentIntents", key = "#id")
     public PaymentIntent markFailed(UUID id) {
         return changeStatus(id, PaymentStatus.FAILED);
     }
 
     @Transactional
-    @CachePut(cacheNames = "paymentIntents", key = "#id")
     public PaymentIntent markCanceled(UUID id) {
         return changeStatus(id, PaymentStatus.CANCELED);
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "paymentIntents", key = "#id")
     public PaymentIntent getById(UUID id) {
         PaymentIntent intent = findById(id);
         logger.info("Retrieved payment intent {}", id);
