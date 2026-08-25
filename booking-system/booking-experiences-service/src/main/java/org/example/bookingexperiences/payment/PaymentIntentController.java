@@ -1,17 +1,15 @@
 package org.example.bookingexperiences.payment;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/payment-intents")
 public class PaymentIntentController {
-
     private final PaymentIntentService paymentIntentService;
 
     public PaymentIntentController(PaymentIntentService paymentIntentService) {
@@ -19,12 +17,9 @@ public class PaymentIntentController {
     }
 
     @PostMapping
-    public ResponseEntity<PaymentIntent> create(@RequestBody Map<String, String> body) {
-        UUID id = UUID.fromString(body.get("id"));
-        UUID bookingId = UUID.fromString(body.get("bookingId"));
-        BigDecimal amount = new BigDecimal(body.get("amount"));
-        PaymentIntent created = paymentIntentService.createPaymentIntent(id, bookingId, amount);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<PaymentIntent> create(@Valid @RequestBody CreatePaymentIntentRequest request) {
+        PaymentIntent created = paymentIntentService.createPaymentIntent(request.id(), request.bookingId(), request.amount());
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PostMapping("/{id}/paid")

@@ -3,7 +3,7 @@ package org.example.bookingexperiences.payment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+
 import java.util.UUID;
 
 @Service
@@ -18,7 +18,6 @@ public class PaymentIntentService {
     @Transactional
     public PaymentIntent createPaymentIntent(UUID id, UUID bookingId, java.math.BigDecimal amount) {
         PaymentIntent intent = new PaymentIntent(id, bookingId, amount, PaymentStatus.CREATED);
-        // createdAt/updatedAt already set by constructor
         return paymentIntentRepository.save(intent);
     }
 
