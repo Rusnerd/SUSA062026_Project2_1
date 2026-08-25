@@ -36,4 +36,9 @@ public class PaymentIntentController {
     public PaymentIntent canceled(@PathVariable UUID id) {
         return paymentIntentService.markCanceled(id);
     }
+    @GetMapping("/{id}")
+    public PaymentIntent getById(@PathVariable UUID id) {
+        return paymentIntentService.getById(id);
+    }
+
 }

@@ -44,4 +44,10 @@ public class PaymentIntentService {
         intent.markCanceled();
         return paymentIntentRepository.save(intent);
     }
+    @Transactional(readOnly = true)
+    public PaymentIntent getById(UUID id) {
+        return paymentIntentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("PaymentIntent not found: " + id));
+    }
+
 }
