@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 import org.example.bookingmain.domain.Room;
 import org.example.bookingmain.domain.RoomBooking;
 import org.example.bookingmain.repository.RoomBookingRepository;
+import org.example.bookingmain.web.CreatePaymentIntentRequest;
+import org.example.bookingmain.web.ExperiencesClient;
 import org.example.bookingmain.repository.RoomRepository;
 import org.example.bookingmain.service.RoomBookingViewMapper.BookingView;
 import org.slf4j.Logger;
@@ -24,11 +26,13 @@ public class BookingService {
   private final RoomBookingRepository bookingRepository;
   private final RoomRepository roomRepository;
   private final CouponService couponService;
+  private final ExperiencesClient experiencesClient;
  
-  public BookingService(RoomBookingRepository bookingRepository, RoomRepository roomRepository, CouponService couponService) {
+  public BookingService(RoomBookingRepository bookingRepository, RoomRepository roomRepository, CouponService couponService, ExperiencesClient experiencesClient) {
     this.bookingRepository = bookingRepository;
     this.roomRepository = roomRepository;
     this.couponService = couponService;
+    this.experiencesClient = experiencesClient;
   }
  
   public RoomBooking createBooking(@Valid BookingCreateRequest req) {
@@ -57,7 +61,11 @@ public class BookingService {
  
     log.info("Creating booking roomId={}, guestName={}", req.roomId(), req.guestName());
     var booking = new RoomBooking(req.roomId(), req.guestName(), req.startDate(), req.endDate(), total, appliedCouponCode);
-    return bookingRepository.save(booking);
+    var savedBooking = bookingRepository.save(booking);
+    experiencesClient.createPaymentIntent(new CreatePaymentIntentRequest(savedBooking.getId(), savedBooking.getId(), savedBooking.getTotalPrice()));
+    experiencesClient.getPaymentIntent(savedBooking.getId());
+    log.info("Created payment intent for booking id={}", savedBooking.getId());
+    return savedBooking;
   }
  
   public void cancel(UUID bookingId) {
@@ -65,7 +73,9 @@ public class BookingService {
     if (!b.cancelable()) throw new IllegalArgumentException("Booking already canceled");
     b.cancel();
     bookingRepository.save(b);
-    log.info("Canceled booking id={}", bookingId);
+    experiencesClient.cancelPayment(bookingId);
+    log.info("Canceled payment for booking id={}", bookingId);
+    log.info("Canceled booking id={", bookingId);
   }
  
   public List<BookingView> findAllViews() {

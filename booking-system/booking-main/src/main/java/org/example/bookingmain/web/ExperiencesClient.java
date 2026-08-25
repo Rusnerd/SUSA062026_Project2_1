@@ -20,4 +20,17 @@ public interface ExperiencesClient {
 
     @PostMapping("/experiences/{id}/cancel")
     ExperienceReservationDto cancel(@PathVariable("id") UUID id);
+
+    @PostMapping("/api/payment-intents")
+    PaymentIntentDto createPaymentIntent(@RequestBody CreatePaymentIntentRequest request);
+
+    @GetMapping("/api/payment-intents/{id}")
+    PaymentIntentDto getPaymentIntent(@PathVariable("id") UUID id);
+
+    @PostMapping("/api/payment-intents/{id}/paid")
+    PaymentIntentDto markPaymentPaid(@PathVariable("id") UUID id);
+
+    @PostMapping("/api/payment-intents/{id}/canceled")
+    PaymentIntentDto cancelPayment(@PathVariable("id") UUID id);
+
 }
