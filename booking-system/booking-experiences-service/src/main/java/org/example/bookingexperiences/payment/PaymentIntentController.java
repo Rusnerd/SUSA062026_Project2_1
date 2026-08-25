@@ -23,21 +23,21 @@ public class PaymentIntentController {
     }
 
     @PostMapping("/{id}/paid")
-    public PaymentIntent paid(@PathVariable UUID id) {
+    public PaymentIntent paid(@PathVariable("id") UUID id) {
         return paymentIntentService.markPaid(id);
     }
 
     @PostMapping("/{id}/failed")
-    public PaymentIntent failed(@PathVariable UUID id) {
+    public PaymentIntent failed(@PathVariable("id") UUID id) {
         return paymentIntentService.markFailed(id);
     }
 
     @PostMapping("/{id}/canceled")
-    public PaymentIntent canceled(@PathVariable UUID id) {
+    public PaymentIntent canceled(@PathVariable("id") UUID id) {
         return paymentIntentService.markCanceled(id);
     }
     @GetMapping("/{id}")
-    public PaymentIntent getById(@PathVariable UUID id) {
+    public PaymentIntent getById(@PathVariable("id") UUID id) {
         return paymentIntentService.getById(id);
     }
 
